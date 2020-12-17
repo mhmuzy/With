@@ -18,6 +18,9 @@ namespace Projeto.Entidades
         /// </summary>
         /// *** Associação da Entidade Produto e Fornecedor
         public Fornecedores Fornecedor { get; set; }
+        /// <summary>
+        /// Atributo Preço do Produto
+        /// </summary>
         public double Preco { get; set; }
         /// <summary>
         /// Atributo Descrição do Produto
