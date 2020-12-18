@@ -120,14 +120,17 @@ namespace Projeto.Apresentacao.Controllers
             return Ok(response);
         }
 
-        //[HttpGet("{id}")]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaProdutoResponse))]
-        //public IActionResult GetById(int id)
-        //{
-        //    var response = new ConsultaProdutoResponse
-        //    { 
-                
-        //    };
-        //}
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaProdutoResponse))]
+        public IActionResult GetById(int id)
+        {
+            var response = new ConsultaProdutoResponse
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Data = new List<Produtos>()
+            };
+
+            return Ok(response);
+        }
     }
 }
