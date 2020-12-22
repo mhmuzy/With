@@ -9,6 +9,7 @@ using Projeto.Apresentacao.Models.Response;
 using Projeto.Entidades;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using Projeto.Repositories;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -52,6 +53,7 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Put(EdicaoClienteRequest request)
         {
+
             var response = new EdicaoClienteResponse
             {
                 StatusCode = StatusCodes.Status200OK,

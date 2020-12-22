@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors; /// *** Importando
 using Microsoft.AspNetCore.Authorization; /// <summary>
 ///  Importando
 /// </summary>
+using Projeto.Repositories;
 
 namespace Projeto.Apresentacao.Controllers
 {
