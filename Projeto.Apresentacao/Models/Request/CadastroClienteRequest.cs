@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations; /// *** Importando
 using Projeto.Entidades; /// <summary>
 ///  Importando
 /// </summary>
+using Projeto.Entidades.Enums;
 
 namespace Projeto.Apresentacao.Models.Request
 {
@@ -25,6 +26,9 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Validação de Campo Obrigatório
         /// *** Atributo Para Informar o Produto, é a Relação da Entidade Produto e Cliente
         public Produtos Produto { get; set; }
+
+        [Required(ErrorMessage = "Por favor, informe a forma de pagamento.")]
+        public FormaPagamento FormaPagamento { get; set; }
 
         [MinLength(14, ErrorMessage = "Formato de Cpf Inválido.")]
         /// *** Validação de Formato de Cpf
@@ -49,6 +53,8 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Atributo Celular do Cliente
         public string Celular { get; set; }
 
+        [MinLength(15, ErrorMessage = "A quantidade mínima de caracter não pode ser inferior a {1} caracteres.")]
+        [MaxLength(200, ErrorMessage = "A quantidade máxima de caracter não pode ser superior a {1} caracteres.")]
         [EmailAddress(ErrorMessage = "E - mail Inválido.")]
         /// *** Validação de E - mail válido
         [Required(ErrorMessage = "Por favor, Digite o E - mail do Cliente.")]

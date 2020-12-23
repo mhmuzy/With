@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Projeto.Infra.Data.Mappings;
+using Projeto.Infra.Data.Entities;
 
 namespace Projeto.Infra.Data.Context
 {
@@ -13,9 +15,11 @@ namespace Projeto.Infra.Data.Context
 
         }
 
+        public DbSet<Fornecedor> Fornecedores { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.ApplyConfiguration(new FornecedorMap());            
         }
     }
 }

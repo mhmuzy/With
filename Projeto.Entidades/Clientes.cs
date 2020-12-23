@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Projeto.Entidades.Enums;
 
 namespace Projeto.Entidades
 {
@@ -27,6 +28,7 @@ namespace Projeto.Entidades
         /// <summary>
         /// Atributo Telefone do Cliente
         /// </summary>
+        public FormaPagamento FormaPagamento { get; set; }
         public string Telefone { get; set; }
         /// <summary>
         /// Atributo Celular do Cliente

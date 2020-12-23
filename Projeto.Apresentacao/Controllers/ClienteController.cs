@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Apresentacao.Models.Request;
 using Projeto.Apresentacao.Models.Response;
-using Projeto.Entidades;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Projeto.Repositories;
+using Projeto.Infra.Data.Contracts;
+using Projeto.Infra.Data.Entities;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -19,23 +20,33 @@ namespace Projeto.Apresentacao.Controllers
     [ApiController]
     public class ClienteController : ControllerBase
     {
+        private readonly IClienteRepository clienteRepository;
+
+        public ClienteController(IClienteRepository clienteRepository)
+        {
+            this.clienteRepository = clienteRepository;
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroClienteResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Post(CadastroClienteRequest request)
         {
-            var entity = new Clientes
+            var entity = new Cliente
             {
                 CodCliente = new Random().Next(999, 999999),
                 Nome = request.Nome,
                 Telefone = request.Telefone,
                 Produto = request.Produto,
                 Celular = request.Celular,
+                FormaPagamento = request.FormaPagamento,
                 Cpf = request.Cpf,
                 Email = request.Email,
                 Endereco = request.Endereco
             };
+
+            clienteRepository.Create(entity);
 
             var response = new CadastroClienteResponse
             { 
@@ -53,11 +64,27 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Put(EdicaoClienteRequest request)
         {
+            var entity = clienteRepository.GetById(request.CodCliente);
+
+            if (entity == null)
+                return UnprocessableEntity();
+
+            entity.Nome = request.Nome;
+            entity.Produto.CodProduto = request.Produto.CodProduto;
+            entity.Telefone = request.Telefone;
+            entity.Celular = request.Celular;
+            entity.FormaPagamento = request.FormaPagamento;
+            entity.Cpf = request.Cpf;
+            entity.Email = request.Email;
+            entity.Endereco = request.Endereco;
+
+            clienteRepository.Update(entity);
 
             var response = new EdicaoClienteResponse
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Cliente Atualizado Com Sucesso."
+                Message = "Cliente Atualizado Com Sucesso.",
+                Data = entity
             };
 
             return Ok(response);
@@ -69,6 +96,11 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(int id)
         {
+            var entity = clienteRepository.GetById(id);
+
+            if (entity == null)
+                return UnprocessableEntity();
+
             var response = new ExclusaoClienteResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
@@ -84,8 +116,8 @@ namespace Projeto.Apresentacao.Controllers
         {
             var response = new ConsultaClienteResponse
             { 
-                StatusCode = StatusCodes.Status200OK,
-                Data = new List<Clientes>()
+                StatusCode = StatusCodes.Status200OK//,
+                //Data = new List<Clientes>()
             };
 
             return Ok(response);
@@ -97,8 +129,8 @@ namespace Projeto.Apresentacao.Controllers
         {
             var response = new ConsultaClienteResponse
             { 
-                StatusCode = StatusCodes.Status200OK,
-                Data = new List<Clientes>()
+                StatusCode = StatusCodes.Status200OK//,
+                //Data = new List<Clientes>()
             };
 
             return Ok(response);

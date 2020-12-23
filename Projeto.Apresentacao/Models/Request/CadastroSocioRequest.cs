@@ -12,9 +12,9 @@ namespace Projeto.Apresentacao.Models.Request
     public class CadastroSocioRequest
         /// *** Criação da Model Cadastro de Sócio Request
     {
-        [MinLength(10, ErrorMessage = "A quantidade mínima de caracter não pode ser inferior a {1} caracteres.")]
+        [MinLength(15, ErrorMessage = "A quantidade mínima de caracter não pode ser inferior a {1} caracteres.")]
         /// *** Validação da Quantidade Mínima de Carateres Permitida
-        [MaxLength(80, ErrorMessage = "A quantidade máxima de caracter não pode ser superior a {1} caracteres.")]
+        [MaxLength(200, ErrorMessage = "A quantidade máxima de caracter não pode ser superior a {1} caracteres.")]
         /// *** Validação da Quantidade Máxima de Caracteres Permitida
         [Required(ErrorMessage = "Por favor, digita o nome do Produto.")]
         /// *** Validação de Campo Obrigatório
@@ -49,6 +49,8 @@ namespace Projeto.Apresentacao.Models.Request
         [Required(ErrorMessage = "Por favor, Digite o e - mail do Sócio")]
         /// *** Validação de Campo Obrigatório
         /// *** Atributo E - mail do Sócio
+        [MinLength(15, ErrorMessage = "A qunatidade mínima de caracter não pode ser inferior a {1} caracteres.")]
+        [MaxLength(200, ErrorMessage = "A quantidade máxima de caracter não pode ser superior a {1} caracteres.")]
         public string Email { get; set; }
 
         [MinLength(20, ErrorMessage = "A quantidade mínima de caracter é de {1} caracteres.")]
