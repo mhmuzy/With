@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
+
 namespace Projeto.Infra.Data.Context
 {
     public class SqlServerContextFactory : IDesignTimeDbContextFactory<SqlServerContext>
@@ -15,13 +16,13 @@ namespace Projeto.Infra.Data.Context
             var configurationBuilder = new ConfigurationBuilder();
             var path = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
 
-            //configurationBuilder.AddJsonFile(path, false);
+            configurationBuilder.AddJsonFile(path, false);
 
             var root = configurationBuilder.Build();
-            var connectionString = root.GetSection("").GetSection("").Value;
+            var connectionString = root.GetSection("ConnectionStrings").GetSection("WithLove").Value;
 
             var builder = new DbContextOptionsBuilder<SqlServerContext>();
-            //builder.UseSqlServer(connectionString);
+            builder.UseSqlServer(connectionString);
 
             return new SqlServerContext(builder.Options);
         }

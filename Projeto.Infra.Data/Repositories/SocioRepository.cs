@@ -16,5 +16,10 @@ namespace Projeto.Infra.Data.Repositories
         {
             this.context = context;
         }
+
+        public Socio GetByCpf(string cpf)
+        {
+            return context.Set<Socio>().Find(cpf);
+        }
     }
 }

@@ -59,6 +59,7 @@ namespace Projeto.Apresentacao.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoSocioResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Put(EdicaoSocioRequest request)
         {
@@ -67,10 +68,20 @@ namespace Projeto.Apresentacao.Controllers
             if (entity == null)
                 return UnprocessableEntity();
 
+            entity.Nome = request.Nome;
+            entity.Telefone = request.Telefone;
+            entity.Celular = request.Celular;
+            entity.Cpf = request.Cpf;
+            entity.Email = request.Email;
+            entity.Endereco = request.Endereco;
+
+            socioRepository.Update(entity);
+
             var response = new EdicaoSocioResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Sócio Atualizado Com Sucesso."
+                Message = "Sócio Atualizado Com Sucesso.",
+                Data = entity
             };
 
             return Ok(response);
@@ -82,10 +93,18 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(int id)
         {
+            var entity = socioRepository.GetById(id);
+
+            if (entity == null)
+                return UnprocessableEntity();
+
+            socioRepository.Delete(entity);
+
             var response = new ExclusaoSocioResponse
             {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Sócio Excluído Com Sucesso."
+                Message = "Sócio Excluído Com Sucesso.",
+                Data = entity
             };
 
             return Ok(response);
@@ -98,7 +117,7 @@ namespace Projeto.Apresentacao.Controllers
             var response = new ConsultaSocioResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
-                Data = new List<Socio>()
+                Data = socioRepository.GetAll()
             };
 
             return Ok(response);
@@ -113,6 +132,23 @@ namespace Projeto.Apresentacao.Controllers
                 StatusCode = StatusCodes.Status200OK,
                 Data = new List<Socio>()
             };
+
+            response.Data.Add(socioRepository.GetById(id));
+
+            return Ok(response);
+        }
+
+        [HttpGet("{cpf}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaSocioResponse))]
+        public IActionResult GetByCpf(string cpf)
+        {
+            var response = new ConsultaSocioResponse
+            { 
+                StatusCode = StatusCodes.Status200OK,
+                Data = new List<Socio>()
+            };
+
+            response.Data.Add(socioRepository.GetByCpf(cpf));
 
             return Ok(response);
         }
