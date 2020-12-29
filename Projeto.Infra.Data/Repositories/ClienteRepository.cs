@@ -16,5 +16,10 @@ namespace Projeto.Infra.Data.Repositories
         {
             this.context = context;
         }
+
+        public Cliente GetByCpf(string cpf)
+        {
+            return context.Set<Cliente>().Find(cpf);
+        }
     }
 }

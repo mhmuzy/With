@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projeto.Apresentacao.Models.Request;
 using Projeto.Apresentacao.Models.Response;
-using Projeto.Entidades;
+using Projeto.Infra.Data.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Projeto.Repositories;
+using Projeto.Infra.Data.Contracts;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -19,13 +20,20 @@ namespace Projeto.Apresentacao.Controllers
     [ApiController]
     public class SocioController : ControllerBase
     {
+        private readonly ISocioRepository socioRepository;
+
+        public SocioController(ISocioRepository socioRepository)
+        {
+            this.socioRepository = socioRepository;
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroSocioResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Post(CadastroSocioRequest request)
         {
-            var entity = new Socios
+            var entity = new Socio
             {
                 Matricula = new Random().Next(999, 999999),
                 Nome = request.Nome,
@@ -35,6 +43,8 @@ namespace Projeto.Apresentacao.Controllers
                 Email = request.Email,
                 Endereco = request.Endereco
             };
+
+            socioRepository.Create(entity);
 
             var response = new CadastroSocioResponse
             { 
@@ -52,6 +62,11 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Put(EdicaoSocioRequest request)
         {
+            var entity = socioRepository.GetById(request.Matricula);
+
+            if (entity == null)
+                return UnprocessableEntity();
+
             var response = new EdicaoSocioResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
@@ -83,7 +98,7 @@ namespace Projeto.Apresentacao.Controllers
             var response = new ConsultaSocioResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
-                Data = new List<Socios>()
+                Data = new List<Socio>()
             };
 
             return Ok(response);
@@ -96,7 +111,7 @@ namespace Projeto.Apresentacao.Controllers
             var response = new ConsultaSocioResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
-                Data = new List<Socios>()
+                Data = new List<Socio>()
             };
 
             return Ok(response);

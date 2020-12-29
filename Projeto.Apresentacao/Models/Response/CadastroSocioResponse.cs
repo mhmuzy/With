@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Projeto.Entidades; /// <summary>
-/// Importando
-/// </summary>
+using Projeto.Infra.Data.Entities;
 
 namespace Projeto.Apresentacao.Models.Response
 {
@@ -19,7 +17,7 @@ namespace Projeto.Apresentacao.Models.Response
         /// <summary>
         /// Atributo Mensagem
         /// </summary>
-        public Socios Data { get; set; }
+        public Socio Data { get; set; }
         /// *** Atributo Dados
     }
 }

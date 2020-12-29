@@ -7,6 +7,7 @@ namespace Projeto.Infra.Data.Contracts
 {
     public interface IFornecedorRepository : IBaseRepository<Fornecedor>
     {
-
+        Fornecedor GetByCpf(string cpf);
+        Fornecedor GetByCnpj(string cnpj);
     }
 }

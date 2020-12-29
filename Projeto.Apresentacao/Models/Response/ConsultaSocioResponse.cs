@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Projeto.Entidades; /// <summary>
-/// Importando
-/// </summary>
+using Projeto.Infra.Data.Entities;
 
 namespace Projeto.Apresentacao.Models.Response
 {
@@ -15,7 +13,7 @@ namespace Projeto.Apresentacao.Models.Response
         /// <summary>
         /// Atributo Status Code
         /// </summary>
-        public List<Socios> Data { get; set; }
+        public List<Socio> Data { get; set; }
         /// *** Atributo Dados
     }
 }

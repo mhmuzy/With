@@ -7,6 +7,6 @@ namespace Projeto.Infra.Data.Contracts
 {
     public interface IClienteRepository : IBaseRepository<Cliente>
     {
-
+        Cliente GetByCpf(string cpf);
     }
 }

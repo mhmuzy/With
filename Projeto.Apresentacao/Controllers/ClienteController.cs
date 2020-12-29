@@ -61,6 +61,7 @@ namespace Projeto.Apresentacao.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoClienteResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Put(EdicaoClienteRequest request)
         {
@@ -96,18 +97,32 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Delete(int id)
         {
+            try
+            {
+
+            
             var entity = clienteRepository.GetById(id);
 
             if (entity == null)
                 return UnprocessableEntity();
 
+                clienteRepository.Delete(entity);
+
             var response = new ExclusaoClienteResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Cliente Excluído Com Sucesso."
+                Message = "Cliente Excluído Com Sucesso.",
+                Data = entity
             };
 
             return Ok(response);
+
+            }
+            catch (Exception)
+            {
+
+                return Ok("Cliente tem um ou mais Produtos cadastrados na compra.");
+            }
         }
 
         [HttpGet]
@@ -116,8 +131,8 @@ namespace Projeto.Apresentacao.Controllers
         {
             var response = new ConsultaClienteResponse
             { 
-                StatusCode = StatusCodes.Status200OK//,
-                //Data = new List<Clientes>()
+                StatusCode = StatusCodes.Status200OK,
+                Data = clienteRepository.GetAll()
             };
 
             return Ok(response);
@@ -129,9 +144,26 @@ namespace Projeto.Apresentacao.Controllers
         {
             var response = new ConsultaClienteResponse
             { 
-                StatusCode = StatusCodes.Status200OK//,
-                //Data = new List<Clientes>()
+                StatusCode = StatusCodes.Status200OK,
+                Data = new List<Cliente>()
             };
+
+            response.Data.Add(clienteRepository.GetById(id));
+
+            return Ok(response);
+        }
+
+        [HttpGet("{cpf}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaClienteResponse))]
+        public IActionResult GetByCpf(string cpf)
+        {
+            var response = new ConsultaClienteResponse
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Data = new List<Cliente>()
+            };
+
+            response.Data.Add(clienteRepository.GetByCpf(cpf));
 
             return Ok(response);
         }

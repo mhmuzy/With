@@ -16,5 +16,15 @@ namespace Projeto.Infra.Data.Repositories
         {
             this.context = context;
         }
+
+        public Fornecedor GetByCpf(string cpf)
+        {
+            return context.Set<Fornecedor>().Find(cpf);
+        }
+
+        public Fornecedor GetByCnpj(string cnpj)
+        {
+            return context.Set<Fornecedor>().Find(cnpj);
+        }
     }
 }
