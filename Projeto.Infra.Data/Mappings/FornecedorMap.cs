@@ -12,7 +12,7 @@ namespace Projeto.Infra.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Fornecedor> builder)
         {
-            //builder.ToTable("Teste");
+            builder.ToTable("Fornecedor");
 
             builder.HasKey(f => f.CodFornecedor);
 

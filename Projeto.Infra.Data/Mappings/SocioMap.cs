@@ -11,7 +11,7 @@ namespace Projeto.Infra.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Socio> builder)
         {
-            //builder.ToTable("");
+            builder.ToTable("Socio");
 
             builder.HasKey(s => s.Matricula);
 

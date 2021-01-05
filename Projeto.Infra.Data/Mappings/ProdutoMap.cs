@@ -11,7 +11,7 @@ namespace Projeto.Infra.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Produto> builder)
         {
-            //builder.ToTable("");
+            builder.ToTable("Produto");
 
             builder.HasKey(p => p.CodProduto);
 
@@ -19,8 +19,8 @@ namespace Projeto.Infra.Data.Mappings
                 .HasMaxLength(200)
                 .IsRequired();
 
-            builder.Property(p => p.Fornecedor.CodFornecedor)
-                .IsRequired();
+            //builder.Property(p => p.Fornecedor.CodFornecedor)
+            //    .IsRequired();
 
             builder.Property(p => p.Preco)
                 .IsRequired();

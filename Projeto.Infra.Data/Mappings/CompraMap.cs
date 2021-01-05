@@ -11,15 +11,15 @@ namespace Projeto.Infra.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Compra> builder)
         {
-            //builder.ToTable("Compra");
+            builder.ToTable("Compra");
 
             builder.HasKey(c => c.CodCompra);
 
-            builder.Property(c => c.Cliente.CodCliente)
-                .IsRequired();
+            //builder.Property(c => c.Cliente.CodCliente)
+            //    .IsRequired();
 
-            builder.Property(c => c.Produto.CodProduto)
-                .IsRequired();
+            //builder.Property(c => c.Produto.CodProduto)
+            //    .IsRequired();
 
             builder.Property(c => c.DataCompra);
         }

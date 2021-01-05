@@ -11,7 +11,7 @@ namespace Projeto.Infra.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<Cliente> builder)
         {
-            //builder.ToTable()
+            builder.ToTable("Cliente");
 
             builder.HasKey(c => c.CodCliente);
 
@@ -19,8 +19,8 @@ namespace Projeto.Infra.Data.Mappings
                 .HasMaxLength(200)
                 .IsRequired();
 
-            builder.Property(c => c.Produto.CodProduto)
-                .IsRequired();
+            //builder.Property(c => c.Produto.CodProduto)
+            //    .IsRequired();
 
             builder.Property(c => c.FormaPagamento)
                 .IsRequired();
