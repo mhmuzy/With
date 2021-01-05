@@ -16,6 +16,7 @@ namespace Projeto.Infra.Data.Mappings
             builder.HasKey(c => c.CodCliente);
 
             builder.Property(c => c.Nome)
+                .HasColumnName("Nome")
                 .HasMaxLength(200)
                 .IsRequired();
 
@@ -23,13 +24,16 @@ namespace Projeto.Infra.Data.Mappings
             //    .IsRequired();
 
             builder.Property(c => c.FormaPagamento)
+                .HasColumnName("FormaPagamento")
                 .IsRequired();
 
             builder.Property(c => c.Cpf)
+                .HasColumnName("Cpf")
                 .HasMaxLength(14)
                 .IsRequired();
 
             builder.Property(c => c.Telefone)
+                .HasColumnName("Telefone")
                 .HasMaxLength(16)
                 .IsRequired();
 
