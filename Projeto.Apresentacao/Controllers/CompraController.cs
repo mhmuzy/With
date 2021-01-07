@@ -9,7 +9,7 @@ using Projeto.Apresentacao.Models.Response;
 using Projeto.Infra.Data.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using Projeto.Repositories;
+using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
 
 namespace Projeto.Apresentacao.Controllers
@@ -38,8 +38,8 @@ namespace Projeto.Apresentacao.Controllers
             {
                 CodCompra = new Random().Next(999, 999999),
                 DataCompra = DateTime.Now,
-                Cliente = request.Cliente,
-                Produto = request.Produto
+                //Cliente = request.Cliente,
+                //Produto = request.Produto
             };
 
             compraRepository.Create(entity);
@@ -66,8 +66,8 @@ namespace Projeto.Apresentacao.Controllers
             if (entity == null)
                 return UnprocessableEntity();
 
-            entity.Produto.CodProduto = request.Produto.CodProduto;
-            entity.Cliente.CodCliente = request.Cliente.CodCliente;
+            //entity.Produto.CodProduto = request.Produto.CodProduto;
+            //entity.Cliente.CodCliente = request.Cliente.CodCliente;
             entity.DataCompra = DateTime.Now;
 
             compraRepository.Update(entity);

@@ -9,7 +9,7 @@ using Projeto.Apresentacao.Models.Response;
 using Projeto.Infra.Data.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using Projeto.Repositories;
+using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
 
 namespace Projeto.Apresentacao.Controllers
@@ -36,9 +36,9 @@ namespace Projeto.Apresentacao.Controllers
             var entity = new Fornecimento
             { 
                 CodFornecimento = new Random().Next(999, 999999),
-                DataFornecimento = new DateTime(),
-                Fornecedor = request.Fornecedor,
-                Produto = request.Produto
+                DataFornecimento = new DateTime()
+                //Fornecedor = request.Fornecedor,
+                //Produto = request.Produto
             };
 
             fornecimentoRepository.Create(entity);
@@ -65,8 +65,8 @@ namespace Projeto.Apresentacao.Controllers
             if (entity == null)
                 return UnprocessableEntity();
 
-            entity.Fornecedor.CodFornecedor = request.Fornecedor.CodFornecedor;
-            entity.Produto.CodProduto = request.Produto.CodProduto;
+            //entity.Fornecedor.CodFornecedor = request.Fornecedor.CodFornecedor;
+            //entity.Produto.CodProduto = request.Produto.CodProduto;
             entity.DataFornecimento = DateTime.Now;
 
             fornecimentoRepository.Update(entity);

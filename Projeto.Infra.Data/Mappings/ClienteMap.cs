@@ -23,9 +23,9 @@ namespace Projeto.Infra.Data.Mappings
             //builder.Property(c => c.Produto.CodProduto)
             //    .IsRequired();
 
-            builder.Property(c => c.FormaPagamento)
-                .HasColumnName("FormaPagamento")
-                .IsRequired();
+            //builder.Property(c => c.FormaPagamento)
+            //    .HasColumnName("FormaPagamento")
+            //    .IsRequired();
 
             builder.Property(c => c.Cpf)
                 .HasColumnName("Cpf")
@@ -38,14 +38,17 @@ namespace Projeto.Infra.Data.Mappings
                 .IsRequired();
 
             builder.Property(c => c.Celular)
+                .HasColumnName("Celular")
                 .HasMaxLength(17)
                 .IsRequired();
 
             builder.Property(c => c.Email)
+                .HasColumnName("Email")
                 .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(c => c.Endereco)
+                .HasColumnName("Endereco")
                 .HasMaxLength(200)
                 .IsRequired();
         }

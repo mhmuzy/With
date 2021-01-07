@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations; /// *** Importando
-using Projeto.Entidades; /// <summary>
-///  Importando
-/// </summary>
 
 namespace Projeto.Apresentacao.Models.Request
 {
@@ -26,10 +23,6 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Atributo Nome do Produto
         public string Nome { get; set; }
 
-        [Required(ErrorMessage = "Por favor, Digite o Fornecedor do Produto.")]
-        /// *** Validação de Campo Obrigatório
-        /// *** Atributo Fornecedor que Forneceu o Produto, A Entidade Fornecedor se Relaciona com a Entidade Produto
-        public Fornecedores Fornecedor { get; set; }
 
         [Required(ErrorMessage = "Por favor, Digite o Preço do Produto.")]
         /// *** Validação de Campo Obrigatório
@@ -44,5 +37,8 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Validação de Campo Obrigatório
         /// *** Atributo Descrição do Produto
         public string Descricao { get; set; }
+
+        [Required(ErrorMessage = "Por favor, informe o Fornecedor que forneceu o produto.")]
+        public int Fornecedor { get; set; }
     }
 }

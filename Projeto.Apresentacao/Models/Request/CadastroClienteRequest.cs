@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations; /// *** Importando
-using Projeto.Entidades; /// <summary>
-///  Importando
-/// </summary>
-using Projeto.Entidades.Enums;
 
 namespace Projeto.Apresentacao.Models.Request
 {
@@ -21,14 +17,6 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Validação de Campo Obrigatório
         /// *** Atributo Nome do Cliente
         public string Nome { get; set; }
-
-        [Required(ErrorMessage = "Por favor, selecione o Produto Desejado.")]
-        /// *** Validação de Campo Obrigatório
-        /// *** Atributo Para Informar o Produto, é a Relação da Entidade Produto e Cliente
-        public Produtos Produto { get; set; }
-
-        [Required(ErrorMessage = "Por favor, informe a forma de pagamento.")]
-        public FormaPagamento FormaPagamento { get; set; }
 
         [MinLength(14, ErrorMessage = "Formato de Cpf Inválido.")]
         /// *** Validação de Formato de Cpf
@@ -70,5 +58,9 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Validação de Campo Obrigatório
         /// *** Atributo Endereço do Cliente
         public string Endereco { get; set; }
+
+        [Required(ErrorMessage = "Por favor, informe a forma de pagamento.")]
+        public int FormaPagamento { get; set; }
+
     }
 }

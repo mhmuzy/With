@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-//using Projeto.Entidades;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Projeto.Infra.Data.Entities
+namespace Projeto.Apresentacao.Repositories
 {
-    public class Produto
+    public class ProdutoEntity
     {
         public int CodProduto { get; set; }
         public string Nome { get; set; }
-        //public Fornecedores Fornecedor { get; set; }
         public double Preco { get; set; }
         public string Descricao { get; set; }
+        public int Fornecedor { get; set; }
     }
 }

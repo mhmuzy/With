@@ -17,26 +17,33 @@ namespace Projeto.Infra.Data.Mappings
             builder.HasKey(f => f.CodFornecedor);
 
             builder.Property(f => f.Nome)
+                .HasColumnName("Nome")
                 .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(f => f.Cpf)
+                .HasColumnName("Cpf")
                 .HasMaxLength(14);
 
             builder.Property(f => f.Cnpj)
+                .HasColumnName("Cnpj")
                 .HasMaxLength(17);
 
             builder.Property(f => f.Telefone)
+                .HasColumnName("Telefone")
                 .HasMaxLength(16);
 
             builder.Property(f => f.Celular)
+                .HasColumnName("Celular")
                 .HasMaxLength(17);
 
             builder.Property(f => f.Email)
+                .HasColumnName("Email")
                 .HasMaxLength(200)
                 .IsRequired();
 
             builder.Property(f => f.Endereco)
+                .HasColumnName("Endereco")
                 .HasMaxLength(200)
                 .IsRequired();
         }

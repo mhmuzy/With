@@ -1,5 +1,0 @@
-{
-  "ConnectionStrings": {
-    "WithLove": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WithLove;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-  }
-}

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations; /// *** Importando
-using Projeto.Entidades; /// <summary>
-///  Importando
-/// </summary>
 
 namespace Projeto.Apresentacao.Models.Request
 {

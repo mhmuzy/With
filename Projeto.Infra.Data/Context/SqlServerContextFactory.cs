@@ -19,7 +19,7 @@ namespace Projeto.Infra.Data.Context
             configurationBuilder.AddJsonFile(path, false);
 
             var root = configurationBuilder.Build();
-            var connectionString = root.GetSection("ConnectionStrings").GetSection("WithLove").Value;
+            var connectionString = root.GetSection("ConnectionStrings").GetSection("WithLove2021").Value;
 
             var builder = new DbContextOptionsBuilder<SqlServerContext>();
             builder.UseSqlServer(connectionString);

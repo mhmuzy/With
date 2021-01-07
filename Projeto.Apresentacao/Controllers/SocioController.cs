@@ -9,7 +9,7 @@ using Projeto.Apresentacao.Models.Response;
 using Projeto.Infra.Data.Entities;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using Projeto.Repositories;
+using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
 
 namespace Projeto.Apresentacao.Controllers

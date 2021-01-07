@@ -16,6 +16,7 @@ namespace Projeto.Infra.Data.Mappings
             builder.HasKey(p => p.CodProduto);
 
             builder.Property(p => p.Nome)
+                .HasColumnName("Nome")
                 .HasMaxLength(200)
                 .IsRequired();
 
@@ -23,9 +24,11 @@ namespace Projeto.Infra.Data.Mappings
             //    .IsRequired();
 
             builder.Property(p => p.Preco)
+                .HasColumnName("Preco")
                 .IsRequired();
 
             builder.Property(p => p.Descricao)
+                .HasColumnName("Descricao")
                 .HasMaxLength(5000)
                 .IsRequired();
         }

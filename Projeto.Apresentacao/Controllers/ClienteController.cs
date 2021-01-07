@@ -8,7 +8,7 @@ using Projeto.Apresentacao.Models.Request;
 using Projeto.Apresentacao.Models.Response;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using Projeto.Repositories;
+using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
 using Projeto.Infra.Data.Entities;
 
@@ -38,9 +38,9 @@ namespace Projeto.Apresentacao.Controllers
                 CodCliente = new Random().Next(999, 999999),
                 Nome = request.Nome,
                 Telefone = request.Telefone,
-                Produto = request.Produto,
+                //Produto = request.Produto,
                 Celular = request.Celular,
-                FormaPagamento = request.FormaPagamento,
+                //FormaPagamento = request.FormaPagamento,
                 Cpf = request.Cpf,
                 Email = request.Email,
                 Endereco = request.Endereco
@@ -71,10 +71,10 @@ namespace Projeto.Apresentacao.Controllers
                 return UnprocessableEntity();
 
             entity.Nome = request.Nome;
-            entity.Produto.CodProduto = request.Produto.CodProduto;
+            //entity.Produto.CodProduto = request.Produto.CodProduto;
             entity.Telefone = request.Telefone;
             entity.Celular = request.Celular;
-            entity.FormaPagamento = request.FormaPagamento;
+            //entity.FormaPagamento = request.FormaPagamento;
             entity.Cpf = request.Cpf;
             entity.Email = request.Email;
             entity.Endereco = request.Endereco;

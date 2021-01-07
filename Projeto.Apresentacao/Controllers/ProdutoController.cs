@@ -10,7 +10,7 @@ using Projeto.Infra.Data.Entities;
 using Microsoft.AspNetCore.Cors; /// *** Importando
 using Microsoft.AspNetCore.Authorization; /// <summary>
 using Projeto.Infra.Data.Contracts;
-using Projeto.Repositories;
+using Projeto.Apresentacao.Repositories;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -41,7 +41,7 @@ namespace Projeto.Apresentacao.Controllers
                 /// *** Código do Produto Recebe um número aleatório
                 Nome = request.Nome,
                 /// *** Atributo Nome Recebe o dado Nome da Model
-                Fornecedor = request.Fornecedor,
+                //Fornecedor = request.Fornecedor,
                 /// *** Atributo Fornecedor Recebe o Dado Fornecedor da Model 
                 Preco = request.Preco,
                 /// *** Atributo Preço recebe o Dado Preço da Model 
@@ -84,7 +84,7 @@ namespace Projeto.Apresentacao.Controllers
 
             entity.Nome = request.Nome;
             entity.Preco = request.Preco;
-            entity.Fornecedor.CodFornecedor = request.Fornecedor.CodFornecedor;
+            //entity.Fornecedor.CodFornecedor = request.Fornecedor.CodFornecedor;
             entity.Descricao = request.Descricao;
 
             produtoRepository.Update(entity);

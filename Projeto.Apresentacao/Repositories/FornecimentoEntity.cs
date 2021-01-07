@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-//using Projeto.Entidades;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Projeto.Infra.Data.Entities
+namespace Projeto.Apresentacao.Repositories
 {
-    public class Fornecimento
+    public class FornecimentoEntity
     {
         public int CodFornecimento { get; set; }
         public DateTime DataFornecimento { get; set; }

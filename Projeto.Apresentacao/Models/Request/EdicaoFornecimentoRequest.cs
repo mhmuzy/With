@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations; /// *** Importando
-using Projeto.Entidades; /// <summary>
-/// Importando
-/// </summary>
 
 namespace Projeto.Apresentacao.Models.Request
 {
@@ -14,11 +11,11 @@ namespace Projeto.Apresentacao.Models.Request
     {
         [Required(ErrorMessage = "Por favor, Digita o Código do Fornecimento.")]
         public int CodFornecimento { get; set; }
-        
-        [Required(ErrorMessage = "Por favor, Digita o Fornecedor.")]
-        public Fornecedores Fornecedor { get; set; }
 
-        [Required(ErrorMessage = "Por favor, Digita o Produto.")]
-        public Produtos Produto { get; set; }
+        [Required(ErrorMessage = "Por favor, informe o fornecedor que fez o fornecimento.")]
+        public int Fornecedor { get; set; }
+
+        [Required(ErrorMessage = "Por favor, informe o produto que foi fornecido.")]
+        public int Produto { get; set; }
     }
 }

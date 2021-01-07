@@ -21,7 +21,8 @@ namespace Projeto.Infra.Data.Mappings
             //builder.Property(f => f.Produto.CodProduto)
             //    .IsRequired();
 
-            builder.Property(f => f.DataFornecimento);
+            builder.Property(f => f.DataFornecimento)
+                .HasColumnName("DataFornecimento");
         }
     }
 }

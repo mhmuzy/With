@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-
-namespace Projeto.Infra.Data.Entities
+namespace Projeto.Apresentacao.Repositories
 {
-    public class Cliente
+    public class ClienteEntity
     {
         public int CodCliente { get; set; }
         public string Nome { get; set; }
