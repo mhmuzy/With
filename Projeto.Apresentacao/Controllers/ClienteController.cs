@@ -33,26 +33,25 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Post(CadastroClienteRequest request)
         {
-            var entity = new Cliente
+            var entity = new ClienteEntity
             {
                 CodCliente = new Random().Next(999, 999999),
                 Nome = request.Nome,
                 Telefone = request.Telefone,
-                //Produto = request.Produto,
+                FormaPagamento = request.FormaPagamento,
                 Celular = request.Celular,
-                //FormaPagamento = request.FormaPagamento,
                 Cpf = request.Cpf,
                 Email = request.Email,
                 Endereco = request.Endereco
             };
 
-            clienteRepository.Create(entity);
+            //clienteRepository.Create(entity);
 
             var response = new CadastroClienteResponse
             { 
                 SatusCode = StatusCodes.Status200OK,
                 Message = "Cliente Cadastrado Com Sucesso.",
-                Data = entity
+                //Data = entity
             };
 
             return Ok(response);
@@ -71,10 +70,8 @@ namespace Projeto.Apresentacao.Controllers
                 return UnprocessableEntity();
 
             entity.Nome = request.Nome;
-            //entity.Produto.CodProduto = request.Produto.CodProduto;
             entity.Telefone = request.Telefone;
             entity.Celular = request.Celular;
-            //entity.FormaPagamento = request.FormaPagamento;
             entity.Cpf = request.Cpf;
             entity.Email = request.Email;
             entity.Endereco = request.Endereco;
