@@ -33,7 +33,7 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Post(CadastroClienteRequest request)
         {
-            var entity = new ClienteEntity
+            var entity = new Cliente
             {
                 CodCliente = new Random().Next(999, 999999),
                 Nome = request.Nome,
@@ -45,13 +45,13 @@ namespace Projeto.Apresentacao.Controllers
                 Endereco = request.Endereco
             };
 
-            //clienteRepository.Create(entity);
+            clienteRepository.Create(entity);
 
             var response = new CadastroClienteResponse
             { 
                 SatusCode = StatusCodes.Status200OK,
                 Message = "Cliente Cadastrado Com Sucesso.",
-                //Data = entity
+                Data = entity
             };
 
             return Ok(response);

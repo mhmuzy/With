@@ -12,5 +12,6 @@ namespace Projeto.Apresentacao.Repositories
         public double Preco { get; set; }
         public string Descricao { get; set; }
         public int Fornecedor { get; set; }
+        public int Quantidade { get; set; }
     }
 }

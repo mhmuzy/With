@@ -36,9 +36,9 @@ namespace Projeto.Apresentacao.Controllers
             var entity = new Fornecimento
             { 
                 CodFornecimento = new Random().Next(999, 999999),
-                DataFornecimento = new DateTime()
-                //Fornecedor = request.Fornecedor,
-                //Produto = request.Produto
+                DataFornecimento = new DateTime(),
+                Fornecedor = request.Fornecedor,
+                Produto = request.Produto
             };
 
             fornecimentoRepository.Create(entity);
@@ -65,8 +65,8 @@ namespace Projeto.Apresentacao.Controllers
             if (entity == null)
                 return UnprocessableEntity();
 
-            //entity.Fornecedor.CodFornecedor = request.Fornecedor.CodFornecedor;
-            //entity.Produto.CodProduto = request.Produto.CodProduto;
+            entity.Fornecedor = request.Fornecedor;
+            entity.Produto = request.Produto;
             entity.DataFornecimento = DateTime.Now;
 
             fornecimentoRepository.Update(entity);

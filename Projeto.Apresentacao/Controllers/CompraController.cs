@@ -34,7 +34,7 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Post(CadastroCompraRequest request)
         {
-            var entity = new CompraEntity
+            var entity = new Compra
             {
                 CodCompra = new Random().Next(999, 999999),
                 DataCompra = DateTime.Now,
@@ -42,13 +42,13 @@ namespace Projeto.Apresentacao.Controllers
                 Produto = request.Produto
             };
 
-            //compraRepository.Create(entity);
+            compraRepository.Create(entity);
 
             var response = new CadastroCompraResponse
             { 
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Compra Cadastrada Com Sucesso.",
-                //Data = entity
+                Data = entity
             };
 
             return Ok(response);
@@ -66,8 +66,8 @@ namespace Projeto.Apresentacao.Controllers
             if (entity == null)
                 return UnprocessableEntity();
 
-            //entity.Produto.CodProduto = request.Produto.CodProduto;
-            //entity.Cliente.CodCliente = request.Cliente.CodCliente;
+            entity.Produto = request.Produto;
+            entity.Cliente = request.Cliente;
             entity.DataCompra = DateTime.Now;
 
             compraRepository.Update(entity);

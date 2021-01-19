@@ -23,6 +23,11 @@ namespace Projeto.Apresentacao.Controllers
     {
         private readonly IProdutoRepository produtoRepository;
 
+        public ProdutoController(IProdutoRepository produtoRepository)
+        {
+            this.produtoRepository = produtoRepository;
+        }
+
         [HttpPost]
         /// *** Método de Cadastro
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroProdutoResponse))]
@@ -84,7 +89,7 @@ namespace Projeto.Apresentacao.Controllers
 
             entity.Nome = request.Nome;
             entity.Preco = request.Preco;
-            //entity.Fornecedor.CodFornecedor = request.Fornecedor.CodFornecedor;
+            entity.Fornecedor = request.Fornecedor;
             entity.Descricao = request.Descricao;
 
             produtoRepository.Update(entity);

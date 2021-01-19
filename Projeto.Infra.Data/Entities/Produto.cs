@@ -9,7 +9,7 @@ namespace Projeto.Infra.Data.Entities
     {
         public int CodProduto { get; set; }
         public string Nome { get; set; }
-        //public Fornecedores Fornecedor { get; set; }
+        public int Fornecedor { get; set; }
         public double Preco { get; set; }
         public string Descricao { get; set; }
     }
