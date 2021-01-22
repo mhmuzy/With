@@ -25,7 +25,7 @@ namespace Projeto.Apresentacao.Models.Request
 
         [MinLength(14, ErrorMessage = "Formato de Cpf Inválido.")]
         /// *** Validação do Formato de Cpf
-        [MaxLength(14, ErrorMessage = "Formato de Cof Inválido.")]
+        [MaxLength(14, ErrorMessage = "Formato de Cpf Inválido.")]
         /// *** Validação do Formato de Cpf
         [Required(ErrorMessage = "Por favor, Digite o Cpf do Cliente.")]
         /// *** Validação de Campo Obrigatório

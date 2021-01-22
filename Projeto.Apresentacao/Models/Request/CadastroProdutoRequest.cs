@@ -35,5 +35,8 @@ namespace Projeto.Apresentacao.Models.Request
 
         [Required(ErrorMessage = "Por favor, informe o fornecedor que forneceu o produto")]
         public int Fornecedor { get; set; }
+
+        [Required(ErrorMessage = "Por favor, informe se o produto está ou não em estoque.")]
+        public int Estoque { get; set; }
     }
 }

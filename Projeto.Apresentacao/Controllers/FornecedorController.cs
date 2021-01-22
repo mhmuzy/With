@@ -37,10 +37,10 @@ namespace Projeto.Apresentacao.Controllers
             { 
                 CodFornecedor = new Random().Next(999, 999999),
                 Nome = request.Nome,
-                Celular = request.Celular,
-                Telefone = request.Telefone,
-                Cnpj = request.Cnpj,
                 Cpf = request.Cpf,
+                Cnpj = request.Cnpj,
+                Telefone = request.Telefone,
+                Celular = request.Celular,
                 Email = request.Email,
                 Endereco = request.Endereco
             };
@@ -70,10 +70,10 @@ namespace Projeto.Apresentacao.Controllers
                 return UnprocessableEntity();
 
             entity.Nome = request.Nome;
+            entity.Cpf = request.Cpf;
+            entity.Cnpj = request.Cnpj;
             entity.Telefone = request.Telefone;
             entity.Celular = request.Celular;
-            entity.Cnpj = request.Cnpj;
-            entity.Cpf = request.Cpf;
             entity.Email = request.Email;
             entity.Endereco = request.Endereco;
 

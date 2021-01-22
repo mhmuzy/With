@@ -37,12 +37,12 @@ namespace Projeto.Apresentacao.Controllers
             {
                 CodCliente = new Random().Next(999, 999999),
                 Nome = request.Nome,
-                Telefone = request.Telefone,
-                FormaPagamento = request.FormaPagamento,
-                Celular = request.Celular,
                 Cpf = request.Cpf,
+                Telefone = request.Telefone,
+                Celular = request.Celular,
                 Email = request.Email,
-                Endereco = request.Endereco
+                Endereco = request.Endereco,
+                FormaPagamento = request.FormaPagamento
             };
 
             clienteRepository.Create(entity);
@@ -70,11 +70,12 @@ namespace Projeto.Apresentacao.Controllers
                 return UnprocessableEntity();
 
             entity.Nome = request.Nome;
+            entity.Cpf = request.Cpf;
             entity.Telefone = request.Telefone;
             entity.Celular = request.Celular;
-            entity.Cpf = request.Cpf;
             entity.Email = request.Email;
             entity.Endereco = request.Endereco;
+            entity.FormaPagamento = request.FormaPagamento;
 
             clienteRepository.Update(entity);
 

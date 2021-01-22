@@ -12,5 +12,6 @@ namespace Projeto.Infra.Data.Entities
         public int Fornecedor { get; set; }
         public double Preco { get; set; }
         public string Descricao { get; set; }
+        public int Estoque { get; set; }
     }
 }

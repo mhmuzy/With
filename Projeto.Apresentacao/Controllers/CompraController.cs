@@ -66,9 +66,10 @@ namespace Projeto.Apresentacao.Controllers
             if (entity == null)
                 return UnprocessableEntity();
 
-            entity.Produto = request.Produto;
-            entity.Cliente = request.Cliente;
+            
             entity.DataCompra = DateTime.Now;
+            entity.Cliente = request.Cliente;
+            entity.Produto = request.Produto;
 
             compraRepository.Update(entity);
 

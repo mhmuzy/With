@@ -65,9 +65,9 @@ namespace Projeto.Apresentacao.Controllers
             if (entity == null)
                 return UnprocessableEntity();
 
+            entity.DataFornecimento = DateTime.Now;
             entity.Fornecedor = request.Fornecedor;
             entity.Produto = request.Produto;
-            entity.DataFornecimento = DateTime.Now;
 
             fornecimentoRepository.Update(entity);
 

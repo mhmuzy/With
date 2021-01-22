@@ -50,8 +50,10 @@ namespace Projeto.Apresentacao.Controllers
                 /// *** Atributo Fornecedor Recebe o Dado Fornecedor da Model 
                 Preco = request.Preco,
                 /// *** Atributo Preço recebe o Dado Preço da Model 
-                Descricao = request.Descricao
+                Descricao = request.Descricao,
                 /// *** Atributo Descrição Recebe o Dado Descrição da Model 
+                Fornecedor = request.Fornecedor,
+                Estoque = request.Estoque
             };
 
             produtoRepository.Create(entity);
@@ -91,6 +93,8 @@ namespace Projeto.Apresentacao.Controllers
             entity.Preco = request.Preco;
             entity.Fornecedor = request.Fornecedor;
             entity.Descricao = request.Descricao;
+            entity.Fornecedor = request.Fornecedor;
+            entity.Estoque = request.Estoque;
 
             produtoRepository.Update(entity);
 
