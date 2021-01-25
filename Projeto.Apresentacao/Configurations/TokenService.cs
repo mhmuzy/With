@@ -6,27 +6,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Text;
+using Projeto.Apresentacao.Repositories;
 
 namespace Projeto.Apresentacao.Configurations
 {
     public class TokenService
     {
-        private readonly AppSettings appSettings;
+        //private readonly AppSettings appSettings;
 
-        public TokenService(AppSettings appSettings)
+        public string GenerateToken(UserEntity user)
         {
-            this.appSettings = appSettings;
-        }
 
-        public string GenerateToken(string username)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(appSettings.SecretKey);
+        var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
 
             var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity
-                    (new Claim[] { new Claim(ClaimTypes.Name, username) }),
+                    (new Claim[] { new Claim(ClaimTypes.Name, user.Username.ToString()) }),
                 Expires = DateTime.Now.AddDays(1),
 
                 SigningCredentials = new SigningCredentials
