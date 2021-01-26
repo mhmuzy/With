@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
 using Projeto.Infra.Data.Entities;
+using Projeto.Apresentacao.Configurations;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -33,6 +34,21 @@ namespace Projeto.Apresentacao.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Post(CadastroClienteRequest request)
         {
+            var user = UserRepository.Get("mhmuzy", "1234");
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            UserEntity userEntity = new UserEntity()
+            { 
+                Username = "mhmuzy",
+                Password = "1234"
+            };
+
+            var token = new TokenService();
+            token.GenerateToken(userEntity);
+
+            user.Password = "";
             var entity = new Cliente
             {
                 CodCliente = new Random().Next(999, 999999),
@@ -51,7 +67,8 @@ namespace Projeto.Apresentacao.Controllers
             { 
                 SatusCode = StatusCodes.Status200OK,
                 Message = "Cliente Cadastrado Com Sucesso.",
-                Data = entity
+                Data = entity,
+                Teste = AppSettings.Secret
             };
 
             return Ok(response);

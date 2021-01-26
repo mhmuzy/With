@@ -24,7 +24,7 @@ namespace Projeto.Apresentacao.Configurations
             {
                 Subject = new ClaimsIdentity
                     (new Claim[] { new Claim(ClaimTypes.Name, user.Username.ToString()) }),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(12),
 
                 SigningCredentials = new SigningCredentials
                     (new SymmetricSecurityKey(key),
