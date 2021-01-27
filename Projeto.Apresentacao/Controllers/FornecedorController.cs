@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
+using Projeto.Apresentacao.Configurations;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -28,107 +29,190 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroFornecedorResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post(CadastroFornecedorRequest request)
+        [Route("Cadastrar Fornecedor")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Post([FromBody] CadastroFornecedorRequest request)
         {
-            var entity = new Fornecedor
-            { 
-                CodFornecedor = new Random().Next(999, 999999),
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityFornecedor = new Fornecedor
+            {
                 Nome = request.Nome,
-                Cpf = request.Cpf,
-                Cnpj = request.Cnpj,
-                Telefone = request.Telefone,
                 Celular = request.Celular,
+                Cnpj = request.Cnpj,
+                Cpf = request.Cpf,
                 Email = request.Email,
+                Telefone = request.Telefone,
                 Endereco = request.Endereco
             };
 
-            fornecedorRepository.Create(entity);
+            fornecedorRepository.Create(entityFornecedor);
+            user.Password = "";
 
             var response = new CadastroFornecedorResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Fornecedor Cadastrado Com Sucesso.",
-                Data = entity
+                Data = entityFornecedor
             };
 
-            return Ok(response);
+
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoFornecedorResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Put(EdicaoFornecedorRequest request)
+        [Route("Alterar Fornecedor")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Put([FromBody] EdicaoFornecedorRequest request)
         {
-            var entity = fornecedorRepository.GetById(request.CodFornecedor);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityFornecedor = fornecedorRepository.GetById(request.CodFornecedor);
+
+            if (entityFornecedor == null)
                 return UnprocessableEntity();
 
-            entity.Nome = request.Nome;
-            entity.Cpf = request.Cpf;
-            entity.Cnpj = request.Cnpj;
-            entity.Telefone = request.Telefone;
-            entity.Celular = request.Celular;
-            entity.Email = request.Email;
-            entity.Endereco = request.Endereco;
 
-            fornecedorRepository.Update(entity);
+            entityFornecedor.Nome = request.Nome;
+            entityFornecedor.Telefone = request.Telefone;
+            entityFornecedor.Cpf = request.Cpf;
+            entityFornecedor.Email = request.Email;
+            entityFornecedor.Endereco = request.Endereco;
+
+            fornecedorRepository.Update(entityFornecedor);
+            user.Password = "";
 
             var response = new EdicaoFornecedorResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Fornecedor Atualizado Com Sucesso.",
-                Data = entity
+                Message = "Compra Atualizada Com Sucesso.",
+                Data = entityFornecedor
             };
 
-            return Ok(response);
+
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExclusaoFornecedorResponse))]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Delete(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Delete(int id)
         {
-            var entity = fornecedorRepository.GetById(id);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+            var entityFornecedor = fornecedorRepository.GetById(id);
+
+            if (entityFornecedor == null)
                 return UnprocessableEntity();
 
-            fornecedorRepository.Delete(entity);
+            fornecedorRepository.Delete(entityFornecedor);
 
             var response = new ExclusaoFornecedorResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Fornecedor Excluído Com Sucesso.",
-                Data = entity
+                Data = entityFornecedor
             };
-
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecedorResponse))]
-        public IActionResult GetAll()
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetAll()
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaFornecedorResponse
             {
                 StatusCode = StatusCodes.Status200OK,
                 Data = fornecedorRepository.GetAll()
             };
-
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecedorResponse))]
-        public IActionResult GetById(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetById(int id)
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaFornecedorResponse
             {
                 StatusCode = StatusCodes.Status200OK,
@@ -137,37 +221,41 @@ namespace Projeto.Apresentacao.Controllers
 
             response.Data.Add(fornecedorRepository.GetById(id));
 
-            return Ok(response);
-        }
-
-        [HttpGet("{cpf}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecedorResponse))]
-        public IActionResult GetByCpf(string cpf)
-        {
-            var response = new ConsultaFornecedorResponse
-            { 
-                StatusCode = StatusCodes.Status200OK,
-                Data = new List<Fornecedor>()
-            };
-
-            response.Data.Add(fornecedorRepository.GetByCpf(cpf));
-
-            return Ok(response);
-        }
-
-        [HttpGet("{cnpj}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecedorResponse))]
-        public IActionResult GetByCnpj(string cnpj)
-        {
-            var response = new ConsultaFornecedorResponse
+            return new
             {
-                 StatusCode = StatusCodes.Status200OK,
-                 Data = new List<Fornecedor>()
+                user = user,
+                message = response
             };
-
-            response.Data.Add(fornecedorRepository.GetByCnpj(cnpj));
-
-            return Ok(response);
         }
+
+        //[HttpGet("{cpf}")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecedorResponse))]
+        //public IActionResult GetByCpf(string cpf)
+        //{
+        //    var response = new ConsultaFornecedorResponse
+        //    { 
+        //        StatusCode = StatusCodes.Status200OK,
+        //        Data = new List<Fornecedor>()
+        //    };
+
+        //    response.Data.Add(fornecedorRepository.GetByCpf(cpf));
+
+        //    return Ok(response);
+        //}
+
+        //[HttpGet("{cnpj}")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecedorResponse))]
+        //public IActionResult GetByCnpj(string cnpj)
+        //{
+        //    var response = new ConsultaFornecedorResponse
+        //    {
+        //         StatusCode = StatusCodes.Status200OK,
+        //         Data = new List<Fornecedor>()
+        //    };
+
+        //    response.Data.Add(fornecedorRepository.GetByCnpj(cnpj));
+
+        //    return Ok(response);
+        //}
     }
 }

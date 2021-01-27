@@ -10,6 +10,7 @@ using Projeto.Apresentacao.Configurations;
 using Projeto.Infra.Data.Entities;
 using Projeto.Infra.Data.Contracts;
 using Projeto.Apresentacao.Models.Response;
+using Projeto.Apresentacao.Models.Request;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -17,17 +18,17 @@ namespace Projeto.Apresentacao.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
-        private readonly IClienteRepository clienteRepository;
+        private readonly IFornecimentoRepository fornecimentoRepository;
 
-        public HomeController(IClienteRepository clienteRepository)
+        public HomeController(IFornecimentoRepository fornecimentoRepository)
         {
-            this.clienteRepository = clienteRepository;
+            this.fornecimentoRepository = fornecimentoRepository;
         }
 
-        [HttpGet]
-        //[Route("Excluir Cliente")]
+        [HttpPut]
+        [Route("Alterar Fornecimento")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> GetAll()
+        public async Task<ActionResult<dynamic>> Put([FromBody] EdicaoFornecimentoRequest request)
         {
 
             UserEntity entity = new UserEntity();
@@ -42,12 +43,29 @@ namespace Projeto.Apresentacao.Controllers
 
             var token = new TokenService();
             token.GenerateToken(entity);
+
+            var entityFornecimento = fornecimentoRepository.GetById(request.CodFornecimento);
+
+            if (entityFornecimento == null)
+                return UnprocessableEntity();
+
+
+            entityFornecimento.Fornecedor = request.Fornecedor;
+            entityFornecimento.Produto = request.Produto;
+            entityFornecimento.DataFornecimento = DateTime.Now;
             
-            var response = new ConsultaClienteResponse
+
+            fornecimentoRepository.Update(entityFornecimento);
+            user.Password = "";
+
+            var response = new EdicaoFornecimentoResponse
             {
                 StatusCode = StatusCodes.Status200OK,
-                Data = clienteRepository.GetAll()
+                Message = "Fornecimento Atualizado Com Sucesso.",
+                Data = entityFornecimento
             };
+
+
             return new
             {
                 user = user,

@@ -19,5 +19,6 @@ namespace Projeto.Apresentacao.Models.Request
 
         [Required(ErrorMessage = "Por favor, informe o produto que foi comprado.")]
         public int Produto { get; set; }
+
     }
 }

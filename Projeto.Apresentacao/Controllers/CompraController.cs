@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
+using Projeto.Apresentacao.Configurations;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -29,120 +30,195 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroCompraResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post(CadastroCompraRequest request)
+        [Route("Cadastrar Compra")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Post([FromBody] CadastroCompraRequest request)
         {
-            var entity = new Compra
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityCompra = new Compra
             {
-                CodCompra = new Random().Next(999, 999999),
-                DataCompra = DateTime.Now,
                 Cliente = request.Cliente,
                 Produto = request.Produto
             };
 
-            compraRepository.Create(entity);
+            compraRepository.Create(entityCompra);
+            user.Password = "";
 
             var response = new CadastroCompraResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Compra Cadastrada Com Sucesso.",
-                Data = entity
+                Message = "Cliente Cadastrado Com Sucesso.",
+                Data = entityCompra
             };
 
-            return Ok(response);
+
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
-
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoCompraResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Put(EdicaoCompraRequest request)
+        [Route("Alterar Compra")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Put([FromBody] EdicaoCompraRequest request)
         {
-            var entity = compraRepository.GetById(request.CodCompra);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityCompra = compraRepository.GetById(request.CodCompra);
+
+            if (entityCompra == null)
                 return UnprocessableEntity();
 
-            
-            entity.DataCompra = DateTime.Now;
-            entity.Cliente = request.Cliente;
-            entity.Produto = request.Produto;
 
-            compraRepository.Update(entity);
+            entityCompra.Cliente = request.Cliente;
+            entityCompra.Produto = request.Produto;
+
+
+            compraRepository.Update(entityCompra);
+            user.Password = "";
 
             var response = new EdicaoCompraResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Compra Atualizada Com Sucesso.",
-                Data = entity
+                Data = entityCompra
             };
 
-            return Ok(response);
+
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExclusaoCompraResponse))]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Delete(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Delete(int id)
         {
-            try
-            {
 
-                var entity = compraRepository.GetById(id);
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
 
-                if (entity == null)
-                    return UnprocessableEntity();
+            var user = UserRepository.Get(entity.Username, entity.Password);
 
-                compraRepository.Delete(entity);
 
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+            var entityCompra = compraRepository.GetById(id);
+
+            if (entityCompra == null)
+                return UnprocessableEntity();
+
+            compraRepository.Delete(entityCompra);
 
             var response = new ExclusaoCompraResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Compra Excluída Com Sucesso.",
-                Data = entity
+                Data = entityCompra
             };
-
-            return Ok(response);
-
-            }
-            catch (Exception)
+            return new
             {
-
-                return Ok("A compra está vinculada com um cliente ou algum produto cadastrado.");
-            }
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaCompraResponse))]
-        public IActionResult GetAll()
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetAll()
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaCompraResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Data = compraRepository.GetAll()
             };
-
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaCompraResponse))]
-        public IActionResult GetById(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetById(int id)
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaCompraResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Data = new List<Compra>()
             };
 
             response.Data.Add(compraRepository.GetById(id));
 
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
     }
 }

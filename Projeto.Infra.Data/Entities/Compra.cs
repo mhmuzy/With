@@ -8,7 +8,6 @@ namespace Projeto.Infra.Data.Entities
     public class Compra
     {
         public int CodCompra { get; set; }
-        public DateTime DataCompra { get; set; }
         public int Cliente { get; set; }
         public int Produto { get; set; }
 

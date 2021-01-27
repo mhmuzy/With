@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors; /// *** Importando
 using Microsoft.AspNetCore.Authorization; /// <summary>
 using Projeto.Infra.Data.Contracts;
 using Projeto.Apresentacao.Repositories;
+using Projeto.Apresentacao.Configurations;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -29,126 +30,135 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpPost]
-        /// *** Método de Cadastro
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroProdutoResponse))]
-        /// *** Se Cadastrar Com Sucesso
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        /// *** Se Der Bug
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        /// *** Se Der Bug
-        public IActionResult Post(CadastroProdutoRequest request)
-            /// *** Criação do Método de Cadastro
+        [Route("Cadastrar Produto")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Post([FromBody] CadastroProdutoRequest request)
         {
-            var entity = new Produto
-            /// *** Criação da Entidade Produto
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityProduto = new Produto
             {
-                CodProduto = new Random().Next(999, 999999),
-                /// *** Código do Produto Recebe um número aleatório
-                Nome = request.Nome,
-                /// *** Atributo Nome Recebe o dado Nome da Model
-                //Fornecedor = request.Fornecedor,
-                /// *** Atributo Fornecedor Recebe o Dado Fornecedor da Model 
-                Preco = request.Preco,
-                /// *** Atributo Preço recebe o Dado Preço da Model 
-                Descricao = request.Descricao,
-                /// *** Atributo Descrição Recebe o Dado Descrição da Model 
                 Fornecedor = request.Fornecedor,
+                Nome = request.Nome,
+                Preco = request.Preco,
+                Descricao = request.Descricao,
                 Estoque = request.Estoque
             };
 
-            produtoRepository.Create(entity);
+            produtoRepository.Create(entityProduto);
+            user.Password = "";
 
             var response = new CadastroProdutoResponse
-                /// *** Instância da Model Response Cadastro de Produto
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
-                /// *** Status Code Recebe 200
                 Message = "Produto Cadastrado Com Sucesso.",
-                /// *** Mensagem Recebe Produto Cadastrado Com Sucesso.
-                Data = entity /// *** Dados Recebe a Entidade Produto
+                Data = entityProduto
             };
 
-            return Ok(response); /// *** Retorna a Model
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpPut]
-        /// *** Criação da Alteração de Dados
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoProdutoResponse))]
-        /// *** Se Rodar Com Sucesso
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        /// *** Se Der Bug
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        /// *** Se Der Bug
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        /// *** Se Der Bug
-        public IActionResult Put(EdicaoProdutoRequest request)
-            /// *** Criação do Endpoint
+        [Route("Alterar Produto")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Put([FromBody] EdicaoProdutoRequest request)
         {
-            var entity = produtoRepository.GetById(request.CodProduto);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityProduto = produtoRepository.GetById(request.CodProduto);
+
+            if (entityProduto == null)
                 return UnprocessableEntity();
 
-            entity.Nome = request.Nome;
-            entity.Preco = request.Preco;
-            entity.Fornecedor = request.Fornecedor;
-            entity.Descricao = request.Descricao;
-            entity.Fornecedor = request.Fornecedor;
-            entity.Estoque = request.Estoque;
 
-            produtoRepository.Update(entity);
+            entityProduto.Nome = request.Nome;
+            entityProduto.Preco = request.Preco;
+            entityProduto.Descricao = request.Descricao;
+            entityProduto.Estoque = request.Estoque;
+            entityProduto.Fornecedor = request.Fornecedor;
+
+            produtoRepository.Update(entityProduto);
+            user.Password = "";
 
             var response = new EdicaoProdutoResponse
-            /// *** Instância da Model de Response de Edição de Produto
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
-                /// *** Status Code Vai Receber 200
                 Message = "Produto Atualizado Com Sucesso.",
-                /// *** Mensagem Vai Receber Produto Atualizado Com Sucesso.
-                Data = entity
+                Data = entityProduto
             };
 
-            return Ok(response); /// *** Retrona a Model
+
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpDelete("{id}")]
-        /// *** Criação da Exclusão
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExclusaoProdutoResponse))]
-        /// *** Se o Programa Rodar Com Sucesso
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        /// *** Se Der Bug
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        /// *** Se Der Bug
-        public IActionResult Delete(int id)
-            /// *** Criação do Endpoint
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Delete(int id)
         {
-            try
-            {
 
-                var entity = produtoRepository.GetById(id);
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
 
-                if (entity == null)
-                    return UnprocessableEntity();
+            var user = UserRepository.Get(entity.Username, entity.Password);
 
-                produtoRepository.Delete(entity);
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+            var entityProduto = produtoRepository.GetById(id);
+
+            if (entityProduto == null)
+                return UnprocessableEntity();
+
+            produtoRepository.Delete(entityProduto);
 
             var response = new ExclusaoProdutoResponse
-            /// *** Instância da Model Response de Exclusão de Produto
-            { 
-                StatusCode = StatusCodes.Status200OK,
-                /// *** Status Code Vai Receber 200
-                Message = "Produto Excluído Com Suecsso.",
-                /// *** Mensagem Vai Receber Produto Excluído Com Sucesso.
-                Data = entity
-            };
-
-            return Ok(response); /// *** Retorna a Model
-            }
-            catch (Exception)
             {
-
-                return Ok("O Produto não pode ser excluído, deve ter algum fornecedor cadastrado.");
-            }
+                StatusCode = StatusCodes.Status200OK,
+                Message = "Produto Excluído Com Sucesso.",
+                Data = entityProduto
+            };
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet]

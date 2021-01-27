@@ -21,8 +21,8 @@ namespace Projeto.Infra.Data.Mappings
             //builder.Property(c => c.Produto.CodProduto)
             //    .IsRequired();
 
-            builder.Property(c => c.DataCompra)
-                .HasColumnName("DataCompra");
+            //builder.Property(c => c.DataCompra)
+            //    .HasColumnName("DataCompra");
 
         }
     }

@@ -19,7 +19,8 @@ namespace Projeto.Infra.Data.Repositories
 
         public Cliente GetByCpf(string cpf)
         {
-            return context.Set<Cliente>().Find(cpf);
+            return context.Set<Cliente>().FirstOrDefault(c => c.Cpf == cpf);
         }
+
     }
 }

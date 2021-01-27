@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
+using Projeto.Apresentacao.Configurations;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -28,119 +29,197 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroFornecimentoResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post(CadastroFornecimentoRequest request)
+        [Route("Cadastrar Fornecimento")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Post([FromBody] CadastroFornecimentoRequest request)
         {
-            var entity = new Fornecimento
-            { 
-                CodFornecimento = new Random().Next(999, 999999),
-                DataFornecimento = new DateTime(),
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityFornecimento = new Fornecimento
+            {
                 Fornecedor = request.Fornecedor,
-                Produto = request.Produto
+                Produto = request.Produto,
+                DataFornecimento = DateTime.Now
             };
 
-            fornecimentoRepository.Create(entity);
+            fornecimentoRepository.Create(entityFornecimento);
+            user.Password = "";
 
             var response = new CadastroFornecimentoResponse
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Fornecimento Cadastrado Com Sucesso.",
-                Data = entity
+                Data = entityFornecimento
             };
 
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoFornecimentoResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Put(EdicaoFornecimentoRequest request)
+        [Route("Alterar Fornecimento")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Put([FromBody] EdicaoFornecimentoRequest request)
         {
-            var entity = fornecimentoRepository.GetById(request.CodFornecimento);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entityFornecimento = fornecimentoRepository.GetById(request.CodFornecimento);
+
+            if (entityFornecimento == null)
                 return UnprocessableEntity();
 
-            entity.DataFornecimento = DateTime.Now;
-            entity.Fornecedor = request.Fornecedor;
-            entity.Produto = request.Produto;
 
-            fornecimentoRepository.Update(entity);
+            entityFornecimento.Fornecedor = request.Fornecedor;
+            entityFornecimento.Produto = request.Produto;
+            entityFornecimento.DataFornecimento = DateTime.Now;
+
+
+            fornecimentoRepository.Update(entityFornecimento);
+            user.Password = "";
 
             var response = new EdicaoFornecimentoResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
-                Message = "Fornecimento Ataulizado Com Sucesso.",
-                Data = entity
+                Message = "Fornecimento Atualizado Com Sucesso.",
+                Data = entityFornecimento
             };
 
-            return Ok(response);
+
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExclusaoFornecimentoResponse))]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Delete(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Delete(int id)
         {
-            try
-            {
 
-                var entity = fornecimentoRepository.GetById(id);
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
 
-                if (entity == null)
-                    return UnprocessableEntity();
+            var user = UserRepository.Get(entity.Username, entity.Password);
 
-                fornecimentoRepository.Delete(entity);
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+            var entityFornecimento = fornecimentoRepository.GetById(id);
+
+            if (entityFornecimento == null)
+                return UnprocessableEntity();
+
+            fornecimentoRepository.Delete(entityFornecimento);
 
             var response = new ExclusaoFornecimentoResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Fornecimento Excluído Com Sucesso.",
-                Data = entity
+                Data = entityFornecimento
             };
-
-            return Ok(response);
-
-
-            }
-            catch (Exception)
+            return new
             {
-
-                return Ok("A exclusão do forneciento não pode ser efetuada, pois pode ter algum fornecedor ou produto cadastrado.");
-            }
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecimentoResponse))]
-        public IActionResult GetAll()
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetAll()
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaFornecimentoResponse
             {
                 StatusCode = StatusCodes.Status200OK,
                 Data = fornecimentoRepository.GetAll()
             };
-
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaFornecimentoResponse))]
-        public IActionResult GetById(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetById(int id)
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaFornecimentoResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Data = new List<Fornecimento>()
             };
 
             response.Data.Add(fornecimentoRepository.GetById(id));
 
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
     }
 }

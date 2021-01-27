@@ -190,33 +190,71 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaClienteResponse))]
-        public IActionResult GetById(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetById(int id)
         {
-            var response = new ConsultaClienteResponse
-            { 
-                StatusCode = StatusCodes.Status200OK,
-                Data = new List<Cliente>()
-            };
 
-            response.Data.Add(clienteRepository.GetById(id));
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
 
-            return Ok(response);
-        }
+            var user = UserRepository.Get(entity.Username, entity.Password);
 
-        [HttpGet("{cpf}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaClienteResponse))]
-        public IActionResult GetByCpf(string cpf)
-        {
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaClienteResponse
             {
                 StatusCode = StatusCodes.Status200OK,
                 Data = new List<Cliente>()
             };
 
-            response.Data.Add(clienteRepository.GetByCpf(cpf));
+            response.Data.Add(clienteRepository.GetById(id));
 
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
+
+        //[HttpGet("{cpf}")]
+        //[Route("Excluir Cliente")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<dynamic>> GetByCpf(string cpf)
+        //{
+
+        //    UserEntity entity = new UserEntity();
+        //    entity.Username = "marcio.freitas";
+        //    entity.Password = "1234";
+
+        //    var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+        //    if (user == null)
+        //        return NotFound(new { message = "Usuário ou senha inválidos" });
+
+        //    var token = new TokenService();
+        //    token.GenerateToken(entity);
+
+        //    var response = new ConsultaClienteResponse
+        //    {
+        //        StatusCode = StatusCodes.Status200OK,
+        //        Data = new List<Cliente>()
+        //    };
+
+        //    response.Data.Add(clienteRepository.GetByCpf(cpf));
+
+        //    return new
+        //    {
+        //        user = user,
+        //        message = response
+        //    };
+        //}
     }
 }

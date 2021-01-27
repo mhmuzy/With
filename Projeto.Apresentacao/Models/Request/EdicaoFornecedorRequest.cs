@@ -30,24 +30,24 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Atributo Cpf do Fornecedor
         public string Cpf { get; set; }
 
-        [MinLength(17, ErrorMessage = "Formato de Cnpj Inválido.")]
+        [MinLength(16, ErrorMessage = "Formato de Cnpj Inválido.")]
         /// *** Validação Formato de Cnpj
-        [MaxLength(17, ErrorMessage = "Formato de Cnpj Inválido.")]
+        [MaxLength(18, ErrorMessage = "Formato de Cnpj Inválido.")]
         /// *** Validação Formato de Cnpj
         /// *** Atributo Cnpj do Fornecedor
         public string Cnpj { get; set; }
 
-        [MinLength(16, ErrorMessage = "Formato de Telefone Inválido.")]
-        /// *** Validação Formato de Telefone
-        [MaxLength(16, ErrorMessage = "Formato de Telefone Inválido.")]
-        /// *** Validação Formato de Telefone
+        [MinLength(12, ErrorMessage = "Formato de Telefone Inválido.")]
+        /// *** Validação do Formato de Telefone
+        [MaxLength(14, ErrorMessage = "Formato de Telefone Inválido.")]
+        /// *** Validação do Formato do Telefone do Fornecedor
         /// *** Atributo Telefone do Fornecedor
         public string Telefone { get; set; }
 
-        [MinLength(17, ErrorMessage = "Formato de Celular Inválido.")]
-        /// *** Validação Formato de Celular
-        [MaxLength(17, ErrorMessage = "Formato de Celular Inválido.")]
-        /// *** Validação Formato de Celular
+        [MinLength(13, ErrorMessage = "Formato de Celular Inválido.")]
+        /// *** Validação do Formato de Celular
+        [MaxLength(15, ErrorMessage = "Formato de Celular Inválido.")]
+        /// *** Validação do Formato do Celular
         /// *** Atributo Celular do Fornecedor
         public string Celular { get; set; }
 
