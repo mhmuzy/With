@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Projeto.Apresentacao.Configurations;
 using Projeto.Infra.Data.Entities;
 using Projeto.Infra.Data.Contracts;
+using Projeto.Apresentacao.Models.Response;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -23,35 +24,34 @@ namespace Projeto.Apresentacao.Controllers
             this.clienteRepository = clienteRepository;
         }
 
-        [HttpPost]
-        [Route("login")]
+        [HttpGet]
+        //[Route("Excluir Cliente")]
         [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody]UserEntity entity)
+        public async Task<ActionResult<dynamic>> GetAll()
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
             var user = UserRepository.Get(entity.Username, entity.Password);
+
 
             if (user == null)
                 return NotFound(new { message = "Usuário ou senha inválidos" });
 
             var token = new TokenService();
             token.GenerateToken(entity);
-            var entityCliente = new Cliente
+            
+            var response = new ConsultaClienteResponse
             {
-                Nome = "Teste 29",
-                Cpf = "565.630.170-29",
-                Telefone = "(21)2123-4568",
-                Celular = "(21)99123-4568",
-                Email = "mhmuzyteste857@gmail.com",
-                Endereco = "Teste 29",
-                FormaPagamento = 1
+                StatusCode = StatusCodes.Status200OK,
+                Data = clienteRepository.GetAll()
             };
-
-            clienteRepository.Create(entityCliente);
-            user.Password = "";
             return new
             {
                 user = user,
-                token = "Correção Realizadacom sucesso."
+                message = response
             };
         }
     }

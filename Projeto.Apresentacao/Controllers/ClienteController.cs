@@ -29,29 +29,25 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroClienteResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post(CadastroClienteRequest request)
+        [Route("Cadastrar Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Post([FromBody] CadastroClienteRequest request)
         {
-            var user = UserRepository.Get("mhmuzy", "1234");
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
 
             if (user == null)
                 return NotFound(new { message = "Usuário ou senha inválidos" });
 
-            UserEntity userEntity = new UserEntity()
-            { 
-                Username = "mhmuzy",
-                Password = "1234"
-            };
-
             var token = new TokenService();
-            token.GenerateToken(userEntity);
-
-            user.Password = "";
-            var entity = new Cliente
+            token.GenerateToken(entity);
+            var entityCliente = new Cliente
             {
-                CodCliente = new Random().Next(999, 999999),
                 Nome = request.Nome,
                 Cpf = request.Cpf,
                 Telefone = request.Telefone,
@@ -61,96 +57,136 @@ namespace Projeto.Apresentacao.Controllers
                 FormaPagamento = request.FormaPagamento
             };
 
-            clienteRepository.Create(entity);
+            clienteRepository.Create(entityCliente);
+            user.Password = "";
 
             var response = new CadastroClienteResponse
-            { 
+            {
                 SatusCode = StatusCodes.Status200OK,
                 Message = "Cliente Cadastrado Com Sucesso.",
-                Data = entity,
-                Teste = AppSettings.Secret
+                Data = entityCliente
             };
 
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoClienteResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Put(EdicaoClienteRequest request)
+        [Route("Atualizar Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Put([FromBody] EdicaoClienteRequest request)
         {
-            var entity = clienteRepository.GetById(request.CodCliente);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+            var entityCliente = clienteRepository.GetById(request.CodCliente);
+
+            if (entityCliente == null)
                 return UnprocessableEntity();
 
-            entity.Nome = request.Nome;
-            entity.Cpf = request.Cpf;
-            entity.Telefone = request.Telefone;
-            entity.Celular = request.Celular;
-            entity.Email = request.Email;
-            entity.Endereco = request.Endereco;
-            entity.FormaPagamento = request.FormaPagamento;
+            entityCliente.Nome = request.Nome;
+            entityCliente.Cpf = request.Cpf;
+            entityCliente.Telefone = request.Telefone;
+            entityCliente.Celular = request.Celular;
+            entityCliente.Email = request.Email;
+            entityCliente.Endereco = request.Endereco;
+            entityCliente.FormaPagamento = request.FormaPagamento;
 
-            clienteRepository.Update(entity);
+            clienteRepository.Update(entityCliente);
 
             var response = new EdicaoClienteResponse
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Cliente Atualizado Com Sucesso.",
-                Data = entity
+                Data = entityCliente
             };
-
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExclusaoClienteResponse))]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Delete(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Delete(int id)
         {
-            try
-            {
 
-            
-            var entity = clienteRepository.GetById(id);
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
 
-            if (entity == null)
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+            var entityCliente = clienteRepository.GetById(id);
+
+            if (entityCliente == null)
                 return UnprocessableEntity();
 
-                clienteRepository.Delete(entity);
+            clienteRepository.Delete(entityCliente);
 
             var response = new ExclusaoClienteResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Cliente Excluído Com Sucesso.",
-                Data = entity
+                Data = entityCliente
             };
-
-            return Ok(response);
-
-            }
-            catch (Exception)
+            return new
             {
-
-                return Ok("Cliente tem um ou mais Produtos cadastrados na compra.");
-            }
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaClienteResponse))]
-        public IActionResult GetAll()
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetAll()
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaClienteResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Data = clienteRepository.GetAll()
             };
-
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet("{id}")]

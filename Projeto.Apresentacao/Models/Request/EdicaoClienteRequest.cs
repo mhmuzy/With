@@ -32,16 +32,16 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Atributo Cpf do Cliente
         public string Cpf { get; set; }
 
-        [MinLength(16, ErrorMessage = "Formato de Telefone Inválido.")]
+        [MinLength(12, ErrorMessage = "Formato de Telefone Inválido.")]
         /// *** Validação do Formato de Telefone
-        [MaxLength(16, ErrorMessage = "Formato de Telefone Inválido.")]
+        [MaxLength(14, ErrorMessage = "Formato de Telefone Inválido.")]
         /// *** Validação do Formato de Telefone
         /// *** Atributo Telefone do Cliente
         public string Telefone { get; set; }
 
-        [MinLength(17, ErrorMessage = "Formato de Celular Inválido.")]
+        [MinLength(13, ErrorMessage = "Formato de Celular Inválido.")]
         /// *** Validação do Formato de Celular
-        [MaxLength(17, ErrorMessage = "Formato de Celular Inválido.")]
+        [MaxLength(15, ErrorMessage = "Formato de Celular Inválido.")]
         /// *** Validação do Formato de Celular
         /// *** Atributo Celular do Cliente
         public string Celular { get; set; }

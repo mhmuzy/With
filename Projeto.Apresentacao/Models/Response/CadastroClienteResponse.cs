@@ -19,6 +19,5 @@ namespace Projeto.Apresentacao.Models.Response
         /// </summary>
         public Cliente Data { get; set; }
         /// *** Atributo Dados
-        public string Teste { get; set; }
-    }
+        }
 }
