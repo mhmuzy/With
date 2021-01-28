@@ -162,22 +162,55 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaProdutoResponse))]
-        public IActionResult GetAll()
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetAll()
         {
-            var response = new ConsultaProdutoResponse
-            { 
-                StatusCode = StatusCodes.Status200OK,
-                Data = produtoRepository.GetAll()
-            };
 
-            return Ok(response);
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var response = new ConsultaProdutoResponse
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Data = produtoRepository.GetAll().ToList() 
+            };
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaProdutoResponse))]
-        public IActionResult GetById(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetById(int id)
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaProdutoResponse
             {
                 StatusCode = StatusCodes.Status200OK,
@@ -186,7 +219,11 @@ namespace Projeto.Apresentacao.Controllers
 
             response.Data.Add(produtoRepository.GetById(id));
 
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
     }
 }

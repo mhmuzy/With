@@ -21,16 +21,16 @@ namespace Projeto.Apresentacao.Models.Request
         /// *** Atributo Nome do Sócio
         public string Nome { get; set; }
 
-        [MinLength(16, ErrorMessage = "Formato de Telefone inválido.")]
+        [MinLength(12, ErrorMessage = "Formato de Telefone inválido.")]
         /// *** Validação de Quantidade Mínima de Caracteres que são Permitidos
-        [MaxLength(16, ErrorMessage = "Formato de Telefone inválido.")]
+        [MaxLength(14, ErrorMessage = "Formato de Telefone inválido.")]
         //// *** Validação de Quantidade Máxima de Caracteres que são Permitidos
         /// *** Atributo Telefone do Sócio
         public string Telefone { get; set; }
 
-        [MinLength(17, ErrorMessage = "Formato de Celular inválido.")]
+        [MinLength(13, ErrorMessage = "Formato de Celular inválido.")]
         /// *** Validação de Quantidade Mínima de Caracteres Permitida
-        [MaxLength(17, ErrorMessage = "Formato de Celular inválido.")]
+        [MaxLength(15, ErrorMessage = "Formato de Celular inválido.")]
         /// *** Validação de Quantidade Máxima de Caracteres Permitida
         /// *** Atributo Celular do Sócio
         public string Celular { get; set; }
@@ -53,7 +53,7 @@ namespace Projeto.Apresentacao.Models.Request
         [MaxLength(200, ErrorMessage = "A quantidade máxima de caracter não pode ser superior a {1} caracteres.")]
         public string Email { get; set; }
 
-        [MinLength(20, ErrorMessage = "A quantidade mínima de caracter é de {1} caracteres.")]
+        [MinLength(15, ErrorMessage = "A quantidade mínima de caracter é de {1} caracteres.")]
         /// *** Validação da Quantidade Mínima permitida de Caracter 
         [MaxLength(200, ErrorMessage = "A quantidade máxima de caracter é de {1} caracteres.")]
         /// *** Validação da Quantidade Máxima permitida de Caracter

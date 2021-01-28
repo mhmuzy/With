@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Projeto.Apresentacao.Repositories;
 using Projeto.Infra.Data.Contracts;
+using Projeto.Apresentacao.Configurations;
 
 namespace Projeto.Apresentacao.Controllers
 {
@@ -28,14 +29,26 @@ namespace Projeto.Apresentacao.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CadastroSocioResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Post(CadastroSocioRequest request)
+        [Route("Cadastrar Sócio")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Post([FromBody] CadastroSocioRequest request)
         {
-            var entity = new Socio
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entitySocio = new Socio
             {
-                Matricula = new Random().Next(999, 999999),
                 Nome = request.Nome,
                 Telefone = request.Telefone,
                 Celular = request.Celular,
@@ -44,113 +57,189 @@ namespace Projeto.Apresentacao.Controllers
                 Endereco = request.Endereco
             };
 
-            socioRepository.Create(entity);
+            socioRepository.Create(entitySocio);
+            user.Password = "";
 
             var response = new CadastroSocioResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Sócio Cadastrado Com Sucesso.",
-                Data = entity
+                Data = entitySocio
             };
 
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EdicaoSocioResponse))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Put(EdicaoSocioRequest request)
+        [Route("Alterar Sócio")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Put([FromBody] EdicaoSocioRequest request)
         {
-            var entity = socioRepository.GetById(request.Matricula);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var entitySocio = socioRepository.GetById(request.Matricula);
+
+            if (entitySocio == null)
                 return UnprocessableEntity();
 
-            entity.Nome = request.Nome;
-            entity.Telefone = request.Telefone;
-            entity.Celular = request.Celular;
-            entity.Cpf = request.Cpf;
-            entity.Email = request.Email;
-            entity.Endereco = request.Endereco;
 
-            socioRepository.Update(entity);
+            entitySocio.Nome = request.Nome;
+            entitySocio.Telefone = request.Telefone;
+            entitySocio.Celular = request.Celular;
+            entitySocio.Cpf = request.Cpf;
+            entitySocio.Email = request.Email;
+            entitySocio.Endereco = request.Endereco;
+
+            socioRepository.Update(entitySocio);
+            user.Password = "";
 
             var response = new EdicaoSocioResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Sócio Atualizado Com Sucesso.",
-                Data = entity
+                Data = entitySocio
             };
 
-            return Ok(response);
+
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExclusaoSocioResponse))]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Delete(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Delete(int id)
         {
-            var entity = socioRepository.GetById(id);
 
-            if (entity == null)
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+            var entitySocio = socioRepository.GetById(id);
+
+            if (entitySocio == null)
                 return UnprocessableEntity();
 
-            socioRepository.Delete(entity);
+            socioRepository.Delete(entitySocio);
 
             var response = new ExclusaoSocioResponse
             {
                 StatusCode = StatusCodes.Status200OK,
                 Message = "Sócio Excluído Com Sucesso.",
-                Data = entity
+                Data = entitySocio
             };
-
-            return Ok(response);
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaSocioResponse))]
-        public IActionResult GetAll()
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetAll()
         {
-            var response = new ConsultaSocioResponse
-            { 
-                StatusCode = StatusCodes.Status200OK,
-                Data = socioRepository.GetAll()
-            };
 
-            return Ok(response);
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
+            var response = new ConsultaSocioResponse
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Data = socioRepository.GetAll().ToList()
+            };
+            return new
+            {
+                user = user,
+                message = response
+            };
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaSocioResponse))]
-        public IActionResult GetById(int id)
+        //[Route("Excluir Cliente")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> GetById(int id)
         {
+
+            UserEntity entity = new UserEntity();
+            entity.Username = "marcio.freitas";
+            entity.Password = "1234";
+
+            var user = UserRepository.Get(entity.Username, entity.Password);
+
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = new TokenService();
+            token.GenerateToken(entity);
+
             var response = new ConsultaSocioResponse
-            { 
+            {
                 StatusCode = StatusCodes.Status200OK,
                 Data = new List<Socio>()
             };
 
             response.Data.Add(socioRepository.GetById(id));
 
-            return Ok(response);
-        }
-
-        [HttpGet("{cpf}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaSocioResponse))]
-        public IActionResult GetByCpf(string cpf)
-        {
-            var response = new ConsultaSocioResponse
-            { 
-                StatusCode = StatusCodes.Status200OK,
-                Data = new List<Socio>()
+            return new
+            {
+                user = user,
+                message = response
             };
-
-            response.Data.Add(socioRepository.GetByCpf(cpf));
-
-            return Ok(response);
         }
+
+        //[HttpGet("{cpf}")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ConsultaSocioResponse))]
+        //public IActionResult GetByCpf(string cpf)
+        //{
+        //    var response = new ConsultaSocioResponse
+        //    { 
+        //        StatusCode = StatusCodes.Status200OK,
+        //        Data = new List<Socio>()
+        //    };
+
+        //    response.Data.Add(socioRepository.GetByCpf(cpf));
+
+        //    return Ok(response);
+        //}
     }
 }
